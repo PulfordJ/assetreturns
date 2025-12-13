@@ -82,6 +82,53 @@ nix flake --help
 
 If this shows help text without errors, you're ready to go!
 
+## Optional: Automate with direnv
+
+[direnv](https://direnv.net/) automatically loads the Nix development environment when you enter the project directory, so you don't need to manually run `nix develop` each time.
+
+### Installing direnv
+
+**macOS (with Homebrew)**:
+```bash
+brew install direnv
+```
+
+**Linux**:
+```bash
+# Using your package manager (example for Ubuntu/Debian)
+sudo apt install direnv
+
+# Or using Nix itself
+nix profile install nixpkgs#direnv
+```
+
+### Setting up direnv
+
+1. Add direnv hook to your shell configuration:
+
+   **Bash** (`~/.bashrc` or `~/.bash_profile`):
+   ```bash
+   eval "$(direnv hook bash)"
+   ```
+
+   **Zsh** (`~/.zshrc`):
+   ```bash
+   eval "$(direnv hook zsh)"
+   ```
+
+2. Restart your terminal or source your shell configuration:
+   ```bash
+   source ~/.bashrc  # or ~/.zshrc for Zsh
+   ```
+
+3. Navigate to the project directory and allow direnv:
+   ```bash
+   cd /path/to/assetreturns
+   direnv allow
+   ```
+
+Now, whenever you enter the project directory, the Nix development environment will automatically activate!
+
 ## Alternative Installation Methods
 
 For more installation options (including single-user installations or Docker), see the [official Nix download page](https://nixos.org/download).
