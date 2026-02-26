@@ -48,7 +48,7 @@
         );
 
         # Build the virtual environment
-        venv = pythonSet.mkVirtualEnv "assetreturns-env" workspace.deps.default;
+        venv = pythonSet.mkVirtualEnv "assetreturns-env" workspace.deps.all;
 
         # Bootstrap shell (for generating uv.lock before venv exists)
         bootstrapShell = pkgs.mkShell {

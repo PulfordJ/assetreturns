@@ -6,13 +6,25 @@ from tabulate import tabulate
 import altair as alt
 
 
-def calculateSDLT(second_property, property_value):
+def calculateSDLT(second_property, property_value, is_first_time_buyer=False):
     rates = [0.00, .02, 0.05, 0.10, 0.12]
     thresholds = [125000, 250000, 925000, 1500000, 10000000]
     total_tax = 0
     remaining_taxable = property_value
+
+    # First-time buyer relief (mutually exclusive with second property surcharge)
+    if is_first_time_buyer and not second_property and property_value <= 500000:
+        # First-time buyer rates: 0% up to £300k, 5% on £300k-£500k
+        if property_value <= 300000:
+            return 0
+        else:
+            # 5% on the portion above £300k
+            return (property_value - 300000) * 0.05
+
+    # Second property surcharge (5% additional on all bands)
     if second_property:
-        rates = [rate + 0.03 for rate in rates]
+        rates = [rate + 0.05 for rate in rates]
+
     for i in range(len(thresholds) - 1, -1, -1):
         threshold = thresholds[i]
         rate = rates[i]

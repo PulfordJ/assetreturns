@@ -8,9 +8,25 @@ from assetreturns import HLStock
 interest_rate = 0.0187
 interest_rate = 0.0359
 def test_calculateSDLT():
-    assert calculateSDLT(True, 100000) == 3000
+    # Standard property tests
     assert calculateSDLT(False, 100000) == 0
-    assert calculateSDLT(True, 300000) == 14000
+    assert calculateSDLT(False, 200000) == 1500  # (200k-125k) * 2%
+
+    # Second property tests (with 5% surcharge)
+    assert calculateSDLT(True, 100000) == 5000  # 100k * 5%
+    assert calculateSDLT(True, 300000) == 20000  # 125k*5% + 125k*7% + 50k*10%
+
+    # First-time buyer tests
+    assert calculateSDLT(False, 250000, is_first_time_buyer=True) == 0
+    assert calculateSDLT(False, 300000, is_first_time_buyer=True) == 0
+    assert calculateSDLT(False, 400000, is_first_time_buyer=True) == 5000  # (400k-300k) * 5%
+    assert calculateSDLT(False, 500000, is_first_time_buyer=True) == 10000  # (500k-300k) * 5%
+
+    # First-time buyer doesn't apply above £500k - uses standard rates
+    assert calculateSDLT(False, 600000, is_first_time_buyer=True) == calculateSDLT(False, 600000)
+
+    # First-time buyer relief doesn't apply to second properties
+    assert calculateSDLT(True, 300000, is_first_time_buyer=True) == calculateSDLT(True, 300000)
 
 def test_RepaymentMortgage():
     mortgage = RepaymentMortgage(75000, 25, interest_rate)
@@ -45,10 +61,11 @@ def test_property_generator_and_property():
                                         MortgageClassToDecorate=RepaymentMortgage, tax_rate=0.2, length=12,
                                         interest_rate=0.03)
 
+    # Updated values due to SDLT surcharge change from 3% to 5% (£2000 difference)
     assert property_forecast.initial_equity_cost == 25000.144439697266
-    assert property_forecast.nominal_return_on_investment(25, 0, 0) == 117492.09528851448
-    assert property_forecast.percentage_return_on_investment(25, 0, 0) == 4.699656658861177
-    assert property_forecast.annual_percentage_return_on_investment(25, 0, 0) == 0.07209667180954638
+    assert property_forecast.nominal_return_on_investment(25, 0, 0) == 115492.09528851448
+    assert property_forecast.percentage_return_on_investment(25, 0, 0) == 4.619657121065537
+    assert property_forecast.annual_percentage_return_on_investment(25, 0, 0) == 0.07149066741581467
 
 def test_hlstock():
     hl_stock = HLStock(200000, 21.73)
