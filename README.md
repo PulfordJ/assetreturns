@@ -4,7 +4,7 @@ A Python project for calculating asset returns with Jupyter notebook support, ma
 
 ## Prerequisites
 
-- Nix with flakes enabled ([installation guide](INSTALL-NIX.md))
+- Nix with flakes enabled ([installation guide](https://github.com/PulfordJ/install-nix))
 - Git
 
 ## Quick Start

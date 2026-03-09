@@ -48,3 +48,12 @@ Thumbs.db
 *.mov
 *.wmv
 
+# direnv
+.direnv/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Claude Code
+.claude/
+
